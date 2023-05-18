@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useCallback,useContext} from 'react';
+import React, { useState, useEffect, useCallback,useContext,useReducer} from 'react';
 import { Flex } from '@chakra-ui/react';
 import { MyContext } from '../App';
+import {useSelector,useDispatch} from "react-redux";
+import { q3Count } from '../Actions';
+
 
 
 interface Props {
@@ -12,21 +15,20 @@ interface Person {
     age: number;
   }
 
+   
 
-const Q3:React.FC<Props> = ({ value }) => {
+const Q3:React.FC<Props> = ({ value }) => 
+{
 
+  const Q3_state =useSelector((state:any)=>state.updateNumber)
 
-    const [count, setCount] = useState(0);
+  const dispatch=useDispatch()
     const [person, setPerson] = useState<Person>({ name: 'John Doe', age: 25 });
 
     useEffect(() => {
         
         console.log('useEffect - Component did mount or update');
-    }, [count]);
-      
-    const increment = useCallback(() => {
-        setCount(prevCount => prevCount + 1);
-      }, []);
+    }, [Q3_state]);
     
       const changeName = useCallback(() => {
         var x =prompt("Enter Name");
@@ -43,12 +45,14 @@ const Q3:React.FC<Props> = ({ value }) => {
             <Flex className='heading'>Question 3</Flex>
             <Flex backgroundColor={'#B97B91'} width={value?'calc(100% - 60px)':'calc(50% - 100px)'} height={value?'45%':""}  padding={value?'0px 30px':'0px 50px'} justifyContent={'center'} textAlign={'center'} alignItems={'center'}>In this task I have used useState, useEffect, useCallback,useContext which are major hooks of react.</Flex>
             <Flex width={value?'100%':'50%'} backgroundColor={'#637C6C'} height={value?'55%':""}  flexDir={'column'} justifyContent={'center'} textAlign={'center'} alignItems={'center'}>
-                <div style={{marginBottom:'30px'}}>Count: {count}</div>
-                <button onClick={increment}>Increment</button>
+                <div style={{marginBottom:'30px'}}>Count: {Q3_state}</div>
+                <button onClick={()=> dispatch(q3Count())}>Increment</button>
                 <div>Name: {person.name}</div>
                 <div >Age: {person.age}</div>
-                <button style={{marginTop:'30px'}} onClick={changeName}>Change Name and Age</button>
+                <button style={{marginTop:'30px'}} onClick={()=>changeName}>Change Name and Age</button>
                 <p>Context Value: {context_data}</p>
+                
+
             </Flex>
         </Flex>
     )
